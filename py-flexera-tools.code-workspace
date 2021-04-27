@@ -20,6 +20,7 @@
   },
   "extensions": {
     "recommendations": [
+      "ms-python.python",
       "davidanson.vscode-markdownlint",
       "formulahendry.code-runner",
       "jamesls.jmespath-vscode",
