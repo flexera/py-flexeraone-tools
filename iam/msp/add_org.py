@@ -8,21 +8,29 @@ import sys
 import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 
+flexera_capabilities =  [
+  "fss",
+  "fcm",
+  "policies",
+  "optima"
+]
 
 @click.command()
 @click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from CM or FlexeraOne', required=True)
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
-@click.option('--org-name', '-o', prompt="Organization Name", required=True)
+@click.option('--org-name', '-n', prompt="Organization Name", required=True)
 @click.option('--first-name', '-f', prompt="Owner First Name", required=True)
 @click.option('--last-name', '-l', prompt="Owner Last Name", required=True)
 @click.option('--email','-e', prompt="Owner Email", required=True)
 @click.option('--msp-org-id', '-m', prompt="MSP Org ID",required=True)
+@click.option('--capabilities','-o', prompt="Capability to Enable", required=True, multiple=True, type=click.Choice(flexera_capabilities))
 
-def cli(refresh_token,host,org_name,first_name,last_name,email,msp_org_id):
+def cli(refresh_token,host,org_name,first_name,last_name,email,msp_org_id,capabilities):
   # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
   logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
   access_token = auth(refresh_token,host)
-  org_data = generate_org_data(org_name, first_name, last_name, email)
+  org_data = generate_org_data(org_name, first_name, last_name, email, set(capabilities))
+  click.echo(org_data)
   create_response = create_org(host, access_token, msp_org_id, org_data)
 
 def auth(refresh_token,host):
@@ -37,11 +45,15 @@ def auth(refresh_token,host):
   access_token = r.json()["access_token"]
   return access_token
 
-def generate_org_data(org_name, first_name, last_name, email):
+def generate_org_data(org_name, first_name, last_name, email, capabilities):
+  arr_capabilities = []
+  for i in capabilities:
+    arr_capabilities.append({ "Name": i })
+
   org_data = {
     "name": org_name,
     "owners": [ { "firstName": first_name, "lastName": last_name, "email": email } ],
-    "capabilities": [ { "Name": "optima" }, { "Name": "policy" }, {"Name": "fcm"}, {"Name": "fss"} ]
+    "capabilities": arr_capabilities
   }
   return org_data
 
