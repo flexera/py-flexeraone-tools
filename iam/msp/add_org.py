@@ -12,7 +12,7 @@ flexera_capabilities = [
 ]
 
 @click.command()
-@click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from CM or FlexeraOne', required=True)
+@click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @click.option('--org-name', '-n', prompt="Organization Name", required=True)
 @click.option('--first-name', '-f', prompt="Owner First Name", required=True)
@@ -21,7 +21,10 @@ flexera_capabilities = [
 @click.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
 @click.option('--capabilities', '-o', prompt="Capability to Enable", required=True, multiple=True, type=click.Choice(flexera_capabilities))
 def cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities):
-
+    """
+      cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities)
+      This is the main function run by this script it takes all the command line options.
+    """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
     access_token = auth(refresh_token, host)
@@ -30,7 +33,10 @@ def cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id,
     create_org(host, access_token, msp_org_id, org_data)
 
 def auth(refresh_token, host):
-
+    """
+    auth(refresh_token, host)
+    Authenticates againsts the FlexeraOne API and returns the access token
+    """
     if host == 'api.flexera.com':
         token_url = "https://login.flexera.com/oidc/token"
     else:
@@ -43,6 +49,10 @@ def auth(refresh_token, host):
     return access_token
 
 def generate_org_data(org_name, first_name, last_name, email, capabilities):
+    """
+    generate_org_data(org_name, first_name, last_name, email, capabilities)
+    Generates org create data from inputs and returns org data object.
+    """
     arr_capabilities = []
     for i in capabilities:
         arr_capabilities.append({"Name": i})
