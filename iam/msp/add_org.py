@@ -1,3 +1,7 @@
+"""
+
+Usage: python create_bill_connect.py <refresh_token> <shard> <org_id> <cbi_integration_id> <cbi_bill_identifier> <cbi_name> <cbi_params> true
+"""
 import json
 import logging
 import requests
@@ -11,7 +15,7 @@ flexera_capabilities = [
     "optima"
 ]
 
-@click.command()
+@click.command(no_args_is_help=True)
 @click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @click.option('--org-name', '-n', prompt="Organization Name", required=True)
@@ -22,8 +26,11 @@ flexera_capabilities = [
 @click.option('--capabilities', '-o', prompt="Capability to Enable", required=True, multiple=True, type=click.Choice(flexera_capabilities))
 def cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities):
     """
-      cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities)
-      This is the main function run by this script it takes all the command line options.
+    \b
+    Organization Add Tool for MSP's
+    -------------------------------
+    Creates an organization and logs the response
+    Ex: python add_org.py --refresh-token <token> -n "<Org Name>" -f "<First Name>" -l "<Last Name>" -e "<email>" -m <msp org id> --capability fcm --capability fss
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
@@ -65,6 +72,10 @@ def generate_org_data(org_name, first_name, last_name, email, capabilities):
     return org_data
 
 def create_org(host, access_token, msp_org_id, org_data):
+    """
+    create_org(host, access_token, msp_org_id, org_data)
+    Creates the org and logs the response.
+    """
     headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
     kwargs = {"headers": headers, "allow_redirects": False}
     msp_url = "https://{}/msp/v1/orgs/{}/customers".format(host, msp_org_id)
