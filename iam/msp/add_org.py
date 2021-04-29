@@ -90,4 +90,4 @@ def create_org(host, access_token, msp_org_id, org_data):
 if __name__ == '__main__':
     # click passes no args
     # pylint: disable=no-value-for-parameter
-    cli()
+    cli(auto_envvar_prefix='FLEXERA')
