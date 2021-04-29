@@ -1,7 +1,3 @@
-"""
-
-Usage: python create_bill_connect.py <refresh_token> <shard> <org_id> <cbi_integration_id> <cbi_bill_identifier> <cbi_name> <cbi_params> true
-"""
 import json
 import logging
 import requests
