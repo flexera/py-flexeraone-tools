@@ -15,8 +15,9 @@
       "default": true,
       "MD024": false
     },
-    "cSpell.words": [
-    ]
+    "cSpell.enabled": false,
+    "python.autoComplete.addBrackets": true,
+    "python.linting.flake8Enabled": true
   },
   "extensions": {
     "recommendations": [
@@ -28,7 +29,8 @@
       "dbaeumer.vscode-eslint",
       "dotjoshjohnson.xml",
       "coenraads.bracket-pair-colorizer-2",
-      "EditorConfig.EditorConfig"
+      "editorconfig.editorconfig",
+      "kevinglasson.cornflakes-linter"
     ]
   }
 }

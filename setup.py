@@ -4,7 +4,8 @@ test_deps = [
     'coverage',
     'pytest',
     'pylint',
-    'flake8'
+    'flake8',
+    'autopep8'
 ]
 
 extras = {
