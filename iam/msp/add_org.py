@@ -47,9 +47,9 @@ def generate_access_token(refresh_token, host):
         token_url = "https://login.flexeratest.com/oidc/token"
 
     logging.info("OAuth2: Getting Access Token via Refresh Token...")
-    r = requests.post(token_url, data={"grant_type": "refresh_token", "refresh_token": refresh_token})
-    r.raise_for_status()
-    access_token = r.json()["access_token"]
+    token_post_request = requests.post(token_url, data={"grant_type": "refresh_token", "refresh_token": refresh_token})
+    token_post_request.raise_for_status()
+    access_token = token_post_request.json()["access_token"]
     return access_token
 
 def generate_org_data(org_name, first_name, last_name, email, capabilities):
