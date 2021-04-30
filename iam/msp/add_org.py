@@ -21,7 +21,7 @@ flexera_capabilities = [
 @click.option('--email', '-e', prompt="Owner Email", required=True)
 @click.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
 @click.option('--capabilities', '-o', prompt="Capability to Enable", required=True, multiple=True, type=click.Choice(flexera_capabilities))
-def cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities):
+def add_iam_msp_org(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities):
     """
     \b
     Organization Add Tool for MSP's
@@ -87,4 +87,4 @@ def create_org(host, access_token, msp_org_id, org_data):
 if __name__ == '__main__':
     # click passes no args
     # pylint: disable=no-value-for-parameter
-    cli(auto_envvar_prefix='FLEXERA')
+    add_iam_msp_org(auto_envvar_prefix='FLEXERA')
