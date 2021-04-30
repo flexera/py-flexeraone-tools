@@ -4,10 +4,11 @@ import requests
 import sys
 import click
 
+# Flexera Organization Capability List for command line validation
 flexera_capabilities = [
     "fss",
     "fcm",
-    "policies",
+    "policy",
     "optima"
 ]
 
@@ -30,12 +31,12 @@ def cli(refresh_token, host, org_name, first_name, last_name, email, msp_org_id,
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
-    access_token = auth(refresh_token, host)
+    access_token = generate_access_token(refresh_token, host)
     org_data = generate_org_data(org_name, first_name, last_name, email, set(capabilities))
     click.echo(org_data)
     create_org(host, access_token, msp_org_id, org_data)
 
-def auth(refresh_token, host):
+def generate_access_token(refresh_token, host):
     """
     auth(refresh_token, host)
     Authenticates againsts the FlexeraOne API and returns the access token
