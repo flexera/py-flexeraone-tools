@@ -41,12 +41,10 @@ def generate_access_token(refresh_token, host):
     auth(refresh_token, host)
     Authenticates againsts the FlexeraOne API and returns the access token
     """
-    if host == 'api.flexera.com':
-        token_url = "https://login.flexera.com/oidc/token"
-    else:
-        token_url = "https://login.flexeratest.com/oidc/token"
+    domain = '.'.join(host.split('.')[-2:])
+    token_url = "https://login.{}/oidc/token".format(domain)
 
-    logging.info("OAuth2: Getting Access Token via Refresh Token...")
+    logging.info("OAuth2: Getting Access Token via Refresh Token for {} ...".format(token_url))
     token_post_request = requests.post(token_url, data={"grant_type": "refresh_token", "refresh_token": refresh_token})
     token_post_request.raise_for_status()
     access_token = token_post_request.json()["access_token"]
@@ -57,14 +55,14 @@ def generate_org_data(org_name, first_name, last_name, email, capabilities):
     generate_org_data(org_name, first_name, last_name, email, capabilities)
     Generates org create data from inputs and returns org data object.
     """
-    arr_capabilities = []
-    for i in capabilities:
-        arr_capabilities.append({"Name": i})
+    capability_name_list = []
+    for capability in capabilities:
+        capability_name_list.append({"Name": capability})
 
     org_data = {
         "name": org_name,
         "owners": [{"firstName": first_name, "lastName": last_name, "email": email}],
-        "capabilities": arr_capabilities
+        "capabilities": capability_name_list
     }
     return org_data
 
