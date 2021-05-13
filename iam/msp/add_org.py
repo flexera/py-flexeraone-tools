@@ -73,12 +73,13 @@ def create_org(host, access_token, msp_org_id, org_data):
     """
     headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
     kwargs = {"headers": headers, "allow_redirects": False}
-    msp_url = "https://{}/msp/v1/orgs/{}/customers".format(host, msp_org_id)
-    r = requests.post(msp_url, json.dumps(org_data), **kwargs, stream=True)
-    logging.info("Response: {}\nHeaders: {}\n".format(r.status_code, r.headers))
-    r.raise_for_status()
-    new_org_url = "https://{}{}".format(host, r.headers['location'])
+    managed_service_provider_customer_url = "https://{}/msp/v1/orgs/{}/customers".format(host, msp_org_id)
+    create_org_request = requests.post(managed_service_provider_customer_url, json.dumps(org_data), **kwargs, stream=True)
+    create_org_request.raise_for_status()
+    logging.info("Response: {}\nHeaders: {}\n".format(create_org_request.status_code, create_org_request.headers))
+    new_org_url = "https://{}{}".format(host, create_org_request.headers['location'])
     get_response = requests.get(new_org_url, **kwargs)
+    get_response.raise_for_status()
     logging.info("Response: {}\nHeaders: {}\nOutput: {}".format(get_response.status_code, get_response.headers, get_response.json()))
 
 

@@ -17,7 +17,8 @@
     },
     "cSpell.enabled": false,
     "python.autoComplete.addBrackets": true,
-    "python.linting.flake8Enabled": true
+    "python.linting.flake8Enabled": true,
+    "python.analysis.completeFunctionParens": true
   },
   "extensions": {
     "recommendations": [
