@@ -55,8 +55,10 @@ def list_orgs(host, access_token, msp_org_id, org_name):
     get_response = requests.get(managed_service_provider_customers_url, **kwargs)
     get_response.raise_for_status()
     orgs = pd.DataFrame(get_response.json())
+    # attempting to fuzzy find the org name: https://jellyfish.readthedocs.io/en/latest/comparison.html#levenshtein-distance
     orgs['res'] = [jellyfish.levenshtein_distance(x, y) for x, y in zip(orgs['name'], org_name)]
     orgs.where(orgs['res'] > (len(org_name) - 2), inplace=True)
+    # getting rid of all the Nan's from the match
     return orgs.dropna(thresh=2)
 
 def delete_org(host, access_token, msp_org_id, org_id):
