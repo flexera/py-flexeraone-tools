@@ -1,5 +1,4 @@
 from setuptools import setup
-import os
 
 test_deps = [
     'coverage',
@@ -7,6 +6,8 @@ test_deps = [
     'pylint',
     'flake8',
     'autopep8'
+    'pytest-flake8',
+    'pytest-mypy'
 ]
 
 dev_deps = [
@@ -28,7 +29,6 @@ setup(
     license_files=('LICENSE'),
     keywords="",
     url="https://github.com/flexera/py-flexeraone-tools",
-    packages=['py-flexeraone-tools', 'tests'],
     long_description=readme.read(),
     classifiers=[],
     # Other metadata...
