@@ -3,8 +3,9 @@ import requests
 import sys
 import click
 import jellyfish
-from click_option_group import optgroup, RequiredMutuallyExclusiveOptionGroup
+from click_option_group import optgroup, MutuallyExclusiveOptionGroup
 import pprint
+import json
 
 @click.command(no_args_is_help=True)
 @optgroup.group('Connection configuration',
@@ -12,7 +13,8 @@ import pprint
 @optgroup.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @optgroup.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
-@optgroup.group('Org Options', cls=RequiredMutuallyExclusiveOptionGroup,
+@optgroup.option('--filename', '-f', help="Filename to save results to.")
+@optgroup.group('Org Options', cls=MutuallyExclusiveOptionGroup,
                 help='Org Options, either id or name')
 @optgroup.option('--org-id', '-o', help='Org ID to Delete')
 @optgroup.option('--org-name', '-n', help="Organization Name to find. Using the name will only print close orgs")
@@ -30,15 +32,18 @@ def list_iam_msp_orgs(**params):
     # click.echo(orgs[['id', 'name', 'match_score']])
     access_token = generate_access_token(params['refresh_token'], params['host'])
     if params['org_id']:
-        get_org(params['host'], access_token, params['msp_org_id'], params['org_id'])
+        orgs = get_org(params['host'], access_token, params['msp_org_id'], params['org_id'])
     else:
         org_list = list_orgs(params['host'], access_token, params['msp_org_id'])
         if params['org_name']:
             orgs = get_closest_match(params['org_name'], org_list)
         else:
             orgs = org_list
+    if params['filename']:
+        with open(params['filename'], 'w+') as f:
+            f.write(json.dumps(orgs, indent=4, sort_keys=False))
+    else:
         pprint.pprint(orgs)
-
 
 def generate_access_token(refresh_token, host):
     """
@@ -60,8 +65,7 @@ def get_org(host, access_token, msp_org_id, org_id):
     managed_service_provider_customer_url = "https://{}/msp/v1/orgs/{}/customers/{}".format(host, msp_org_id, org_id)
     get_response = requests.get(managed_service_provider_customer_url, **kwargs)
     get_response.raise_for_status()
-    org_list = get_response.json()
-    pprint.pprint(org_list)
+    return get_response.json()
 
 def list_orgs(host, access_token, msp_org_id):
     headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
