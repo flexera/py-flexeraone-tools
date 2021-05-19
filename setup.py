@@ -5,7 +5,7 @@ test_deps = [
     'pytest',
     'pylint',
     'flake8',
-    'autopep8'
+    'autopep8',
     'pytest-flake8',
     'pytest-mypy'
 ]
