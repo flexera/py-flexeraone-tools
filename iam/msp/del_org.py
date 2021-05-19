@@ -10,7 +10,7 @@ from click_option_group import optgroup
 @optgroup.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @optgroup.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
-@optgroup.option('--org-id', '-o', help='Org ID to Delete')
+@optgroup.option('--org-id', '-o', prompt='Org ID to Delete', required=True)
 def del_iam_msp_org(**params):
     """
     \b
