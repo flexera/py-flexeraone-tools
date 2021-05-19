@@ -32,7 +32,7 @@ def del_iam_msp_org(**params):
         delete_org(params['host'], access_token, params['msp_org_id'], params['org_id'])
     else:
         orgs = list_orgs(params['host'], access_token, params['msp_org_id'], params['org_name'])
-        click.echo(orgs)
+        click.echo(orgs[['id', 'name', 'match_score']])
 
 def generate_access_token(refresh_token, host):
     """
@@ -54,12 +54,8 @@ def list_orgs(host, access_token, msp_org_id, org_name):
     managed_service_provider_customers_url = "https://{}/msp/v1/orgs/{}/customers".format(host, msp_org_id)
     get_response = requests.get(managed_service_provider_customers_url, **kwargs)
     get_response.raise_for_status()
-    orgs = pd.DataFrame(get_response.json())
-    # attempting to fuzzy find the org name: https://jellyfish.readthedocs.io/en/latest/comparison.html#levenshtein-distance
-    orgs['res'] = [jellyfish.levenshtein_distance(x, y) for x, y in zip(orgs['name'], org_name)]
-    orgs.where(orgs['res'] > (len(org_name) - 2), inplace=True)
-    # getting rid of all the Nan's from the match
-    return orgs.dropna(thresh=2)
+    org_list = get_response.json()
+    return pd.DataFrame(get_closest_match(org_name, org_list))
 
 def delete_org(host, access_token, msp_org_id, org_id):
     headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
@@ -68,6 +64,18 @@ def delete_org(host, access_token, msp_org_id, org_id):
     click.echo("deleting org: {}".format(managed_service_provider_customer_url))
     delete_request = requests.delete(managed_service_provider_customer_url, **kwargs)
     delete_request.raise_for_status()
+    logging.info("Response: {}\nHeaders: {}\n".format(delete_request.status_code, delete_request.headers))
+
+def get_closest_match(x, org_list):
+    number_of_changes_needed = 0
+    for org in org_list:
+        match_score = jellyfish.damerau_levenshtein_distance(org['name'], x)
+        org['match_score'] = match_score
+        if number_of_changes_needed < match_score:
+            number_of_changes_needed = match_score
+    best_match = list(filter(lambda x: x['match_score'] < number_of_changes_needed/2, org_list))
+    top_ten = sorted(best_match, key=lambda i: i['match_score'])[:10]
+    return top_ten
 
 
 if __name__ == '__main__':
