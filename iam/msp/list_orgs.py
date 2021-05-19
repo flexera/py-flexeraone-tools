@@ -1,0 +1,89 @@
+import logging
+import requests
+import sys
+import click
+import jellyfish
+from click_option_group import optgroup, RequiredMutuallyExclusiveOptionGroup
+import pprint
+
+@click.command(no_args_is_help=True)
+@optgroup.group('Connection configuration',
+                help='The configuration of some server connection')
+@optgroup.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
+@optgroup.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
+@optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
+@optgroup.group('Org Options', cls=RequiredMutuallyExclusiveOptionGroup,
+                help='Org Options, either id or name')
+@optgroup.option('--org-id', '-o', help='Org ID to Delete')
+@optgroup.option('--org-name', '-n', help="Organization Name to find. Using the name will only print close orgs")
+def list_iam_msp_orgs(**params):
+    """
+    \b
+    Organization Add Tool for MSP's
+    -------------------------------
+    Creates an organization and logs the response
+    Ex: python add_org.py --refresh-token <token> -n "<Org Name>" -f "<First Name>" -l "<Last Name>" -e "<email>" -m <msp org id> --capability fcm --capability fss
+    """
+    # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
+    click.echo(params)
+    logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
+    # click.echo(orgs[['id', 'name', 'match_score']])
+    access_token = generate_access_token(params['refresh_token'], params['host'])
+    if params['org_id']:
+        get_org(params['host'], access_token, params['msp_org_id'], params['org_id'])
+    else:
+        org_list = list_orgs(params['host'], access_token, params['msp_org_id'])
+        if params['org_name']:
+            orgs = get_closest_match(params['org_name'], org_list)
+        else:
+            orgs = org_list
+        pprint.pprint(orgs)
+
+
+def generate_access_token(refresh_token, host):
+    """
+    auth(refresh_token, host)
+    Authenticates againsts the FlexeraOne API and returns the access token
+    """
+    domain = '.'.join(host.split('.')[-2:])
+    token_url = "https://login.{}/oidc/token".format(domain)
+
+    logging.info("OAuth2: Getting Access Token via Refresh Token for {} ...".format(token_url))
+    token_post_request = requests.post(token_url, data={"grant_type": "refresh_token", "refresh_token": refresh_token})
+    token_post_request.raise_for_status()
+    access_token = token_post_request.json()["access_token"]
+    return access_token
+
+def get_org(host, access_token, msp_org_id, org_id):
+    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
+    kwargs = {"headers": headers, "allow_redirects": False}
+    managed_service_provider_customer_url = "https://{}/msp/v1/orgs/{}/customers/{}".format(host, msp_org_id, org_id)
+    get_response = requests.get(managed_service_provider_customer_url, **kwargs)
+    get_response.raise_for_status()
+    org_list = get_response.json()
+    pprint.pprint(org_list)
+
+def list_orgs(host, access_token, msp_org_id):
+    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
+    kwargs = {"headers": headers, "allow_redirects": False}
+    managed_service_provider_customers_url = "https://{}/msp/v1/orgs/{}/customers".format(host, msp_org_id)
+    get_response = requests.get(managed_service_provider_customers_url, **kwargs)
+    get_response.raise_for_status()
+    return get_response.json()
+
+def get_closest_match(x, org_list):
+    number_of_changes_needed = 0
+    for org in org_list:
+        match_score = jellyfish.damerau_levenshtein_distance(org['name'], x)
+        org['match_score'] = match_score
+        if number_of_changes_needed < match_score:
+            number_of_changes_needed = match_score
+    best_match = list(filter(lambda x: x['match_score'] < number_of_changes_needed/2, org_list))
+    top_ten = sorted(best_match, key=lambda i: i['match_score'])[:10]
+    return top_ten
+
+
+if __name__ == '__main__':
+    # click passes no args
+    # pylint: disable=no-value-for-parameter
+    list_iam_msp_orgs(auto_envvar_prefix='FLEXERA')
