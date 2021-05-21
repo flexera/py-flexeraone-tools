@@ -3,6 +3,7 @@ import logging
 import requests
 import sys
 import click
+import pprint
 
 # Flexera Organization Capability List for command line validation
 flexera_capabilities = [
@@ -80,7 +81,8 @@ def create_org(host, access_token, msp_org_id, org_data):
     new_org_url = "https://{}{}".format(host, create_org_request.headers['location'])
     get_response = requests.get(new_org_url, **kwargs)
     get_response.raise_for_status()
-    logging.info("Response: {}\nHeaders: {}\nOutput: {}".format(get_response.status_code, get_response.headers, get_response.json()))
+    logging.info("Response: {}\nHeaders: {}\n".format(get_response.status_code, get_response.headers))
+    pprint.pprint(get_response.json())
 
 
 if __name__ == '__main__':
