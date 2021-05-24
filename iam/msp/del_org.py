@@ -13,7 +13,6 @@ from click_option_group import optgroup
 @optgroup.option('--org-id', '-o', prompt="Org ID to Delete", help="Org ID to Delete", required=True)
 def del_iam_msp_org(**params):
     """
-    \b
     Organization Delete Tool for MSP's
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!

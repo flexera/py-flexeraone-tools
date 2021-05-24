@@ -20,7 +20,6 @@ import json
 @optgroup.option('--org-name', '-n', help="Organization Name to find. Using the name will only print close orgs")
 def list_iam_msp_orgs(**params):
     """
-    \b
     Lists Organizations and allows search by name
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!

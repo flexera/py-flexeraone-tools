@@ -24,7 +24,6 @@ flexera_capabilities = [
 @click.option('--capabilities', '-o', prompt="Capability to Enable", required=True, multiple=True, type=click.Choice(flexera_capabilities))
 def add_iam_msp_org(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities):
     """
-    \b
     Organization Add Tool for MSP's
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
@@ -35,10 +34,6 @@ def add_iam_msp_org(refresh_token, host, org_name, first_name, last_name, email,
     create_org(host, access_token, msp_org_id, org_data)
 
 def generate_access_token(refresh_token, host):
-    """
-    auth(refresh_token, host)
-    Authenticates againsts the FlexeraOne API and returns the access token
-    """
     domain = '.'.join(host.split('.')[-2:])
     token_url = "https://login.{}/oidc/token".format(domain)
 

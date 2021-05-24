@@ -2,7 +2,6 @@
 
 * [add\_org](#add_org)
   * [add\_iam\_msp\_org](#add_org.add_iam_msp_org)
-  * [generate\_access\_token](#add_org.generate_access_token)
   * [generate\_org\_data](#add_org.generate_org_data)
   * [create\_org](#add_org.create_org)
 * [del\_org](#del_org)
@@ -12,12 +11,10 @@
 * [update\_org](#update_org)
   * [update\_iam\_msp\_org](#update_org.update_iam_msp_org)
 
-np</a>
-
+<a name="add_org"></a>
 # add\_org
 
 <a name="add_org.add_iam_msp_org"></a>
-
 #### add\_iam\_msp\_org
 
 ```python
@@ -33,22 +30,9 @@ np</a>
 add_iam_msp_org(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities)
 ```
 
-\b
 Organization Add Tool for MSP's
 
-<a name="add_org.generate_access_token"></a>
-
-#### generate\_access\_token
-
-```python
-generate_access_token(refresh_token, host)
-```
-
-auth(refresh_token, host)
-Authenticates againsts the FlexeraOne API and returns the access token
-
 <a name="add_org.generate_org_data"></a>
-
 #### generate\_org\_data
 
 ```python
@@ -59,7 +43,6 @@ generate_org_data(org_name, first_name, last_name, email, capabilities)
 Generates org create data from inputs and returns org data object.
 
 <a name="add_org.create_org"></a>
-
 #### create\_org
 
 ```python
@@ -70,11 +53,9 @@ create_org(host, access_token, msp_org_id, org_data)
 Creates the org and logs the response.
 
 <a name="del_org"></a>
-
 # del\_org
 
 <a name="del_org.del_iam_msp_org"></a>
-
 #### del\_iam\_msp\_org
 
 ```python
@@ -88,15 +69,12 @@ Creates the org and logs the response.
 del_iam_msp_org(**params)
 ```
 
-\b
 Organization Delete Tool for MSP's
 
 <a name="list_orgs"></a>
-
 # list\_orgs
 
 <a name="list_orgs.list_iam_msp_orgs"></a>
-
 #### list\_iam\_msp\_orgs
 
 ```python
@@ -114,15 +92,12 @@ Organization Delete Tool for MSP's
 list_iam_msp_orgs(**params)
 ```
 
-\b
 Lists Organizations and allows search by name
 
 <a name="update_org"></a>
-
 # update\_org
 
 <a name="update_org.update_iam_msp_org"></a>
-
 #### update\_iam\_msp\_org
 
 ```python
@@ -137,5 +112,5 @@ Lists Organizations and allows search by name
 update_iam_msp_org(**params)
 ```
 
-\b
 MSP Organization update tool.
+

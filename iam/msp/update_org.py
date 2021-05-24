@@ -15,7 +15,6 @@ import json
 @optgroup.option('--filename', '-f', prompt="JSON file with settings", help="JSON file with settings", required=True)
 def update_iam_msp_org(**params):
     """
-    \b
     MSP Organization update tool.
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
