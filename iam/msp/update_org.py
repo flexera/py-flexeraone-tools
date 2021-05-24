@@ -10,16 +10,13 @@ import json
                 help='The configuration of some server connection')
 @optgroup.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @optgroup.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
-@optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
-@optgroup.option('--org-id', '-o', prompt='Org ID to update', required=True)
-@optgroup.option('--filename', '-f', prompt="JSON file with settings", required=True)
+@optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", help="MSP Org ID", required=True)
+@optgroup.option('--org-id', '-o', prompt='Org ID to update', help='Org ID to update', required=True)
+@optgroup.option('--filename', '-f', prompt="JSON file with settings", help="JSON file with settings", required=True)
 def update_iam_msp_org(**params):
     """
     \b
-    Organization Add Tool for MSP's
-    -------------------------------
-    Creates an organization and logs the response
-    Ex: python add_org.py --refresh-token <token> -n "<Org Name>" -f "<First Name>" -l "<Last Name>" -e "<email>" -m <msp org id> --capability fcm --capability fss
+    MSP Organization update tool.
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     click.echo(params)
@@ -30,10 +27,6 @@ def update_iam_msp_org(**params):
     update_org(params['host'], access_token, params['msp_org_id'], params['org_id'], options)
 
 def generate_access_token(refresh_token, host):
-    """
-    auth(refresh_token, host)
-    Authenticates againsts the FlexeraOne API and returns the access token
-    """
     domain = '.'.join(host.split('.')[-2:])
     token_url = "https://login.{}/oidc/token".format(domain)
 

@@ -12,19 +12,16 @@ import json
                 help='The configuration of some server connection')
 @optgroup.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @optgroup.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
-@optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
+@optgroup.option('--msp-org-id', '-m', prompt="MSP Org ID", help="MSP Org ID", required=True)
 @optgroup.option('--filename', '-f', help="Filename to save results to.")
 @optgroup.group('Org Options', cls=MutuallyExclusiveOptionGroup,
                 help='Org Options, either id or name')
-@optgroup.option('--org-id', '-o', help='Org ID to Delete')
+@optgroup.option('--org-id', '-o', help='Org ID to Get')
 @optgroup.option('--org-name', '-n', help="Organization Name to find. Using the name will only print close orgs")
 def list_iam_msp_orgs(**params):
     """
     \b
-    Organization Add Tool for MSP's
-    -------------------------------
-    Creates an organization and logs the response
-    Ex: python add_org.py --refresh-token <token> -n "<Org Name>" -f "<First Name>" -l "<Last Name>" -e "<email>" -m <msp org id> --capability fcm --capability fss
+    Lists Organizations and allows search by name
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     click.echo(params)
@@ -46,10 +43,6 @@ def list_iam_msp_orgs(**params):
         pprint.pprint(orgs)
 
 def generate_access_token(refresh_token, host):
-    """
-    auth(refresh_token, host)
-    Authenticates againsts the FlexeraOne API and returns the access token
-    """
     domain = '.'.join(host.split('.')[-2:])
     token_url = "https://login.{}/oidc/token".format(domain)
 

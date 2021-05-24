@@ -16,19 +16,16 @@ flexera_capabilities = [
 @click.command(no_args_is_help=True)
 @click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
-@click.option('--org-name', '-n', prompt="Organization Name", required=True)
-@click.option('--first-name', '-f', prompt="Owner First Name", required=True)
-@click.option('--last-name', '-l', prompt="Owner Last Name", required=True)
-@click.option('--email', '-e', prompt="Owner Email", required=True)
-@click.option('--msp-org-id', '-m', prompt="MSP Org ID", required=True)
+@click.option('--org-name', '-n', prompt="Organization Name", help="Organization Name", required=True)
+@click.option('--first-name', '-f', prompt="Owner First Name", help="Owner First Name", required=True)
+@click.option('--last-name', '-l', prompt="Owner Last Name", help="Owner Last Name", required=True)
+@click.option('--email', '-e', prompt="Owner Email", help="Owner Email", required=True)
+@click.option('--msp-org-id', '-m', prompt="MSP Org ID", help="MSP Org ID", required=True)
 @click.option('--capabilities', '-o', prompt="Capability to Enable", required=True, multiple=True, type=click.Choice(flexera_capabilities))
 def add_iam_msp_org(refresh_token, host, org_name, first_name, last_name, email, msp_org_id, capabilities):
     """
     \b
     Organization Add Tool for MSP's
-    -------------------------------
-    Creates an organization and logs the response
-    Ex: python add_org.py --refresh-token <token> -n "<Org Name>" -f "<First Name>" -l "<Last Name>" -e "<email>" -m <msp org id> --capability fcm --capability fss
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
