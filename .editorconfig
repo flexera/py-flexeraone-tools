@@ -10,7 +10,7 @@ insert_final_newline = true
 # Ruby style files
 [**.py]
 indent_style = space
-indent_size = 2
+indent_size = 4
 
 # Markdown files
 [**.md]
