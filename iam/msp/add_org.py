@@ -75,9 +75,3 @@ def create_org(host, access_token, msp_org_id, org_data):
     get_response.raise_for_status()
     logging.info("Response: {}\nHeaders: {}\n".format(get_response.status_code, get_response.headers))
     pprint.pprint(get_response.json())
-
-
-if __name__ == '__main__':
-    # click passes no args
-    # pylint: disable=no-value-for-parameter
-    add_iam_msp_org(auto_envvar_prefix='FLEXERA')
