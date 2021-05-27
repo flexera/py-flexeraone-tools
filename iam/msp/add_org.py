@@ -13,7 +13,7 @@ flexera_capabilities = [
     "optima"
 ]
 
-@click.command(no_args_is_help=True)
+@click.command()
 @click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @click.option('--org-name', '-n', prompt="Organization Name", help="Organization Name", required=True)
