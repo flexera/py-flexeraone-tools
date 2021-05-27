@@ -1,10 +1,12 @@
+from iam.iam import iam_cli
 import click
 from .add_org import add_iam_msp_org
 from .del_org import del_iam_msp_org
 from .list_orgs import list_iam_msp_orgs
 from .update_org import update_iam_msp_org
 
-@click.group()
+@iam_cli.group()
+@click.pass_obj
 def msp_cli():
     pass
 
