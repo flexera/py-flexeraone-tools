@@ -29,23 +29,19 @@ import sys
 import time
 import urllib3
 from urllib3.exceptions import InsecureRequestWarning
+import click
+import pprint
 
 # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
 logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
 
-if len(sys.argv) < 9:
-    logging.error('Missing command-line options!!!')
-    print(__doc__)
-    sys.exit(1)
+@click.command(no_args_is_help=True)
+@click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
+@click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 
 refresh_token, shard, org_id, cbi_integration_id, cbi_bill_identifier, cbi_name, cbi_params, tls_verification = sys.argv[1:]
 logging.info("Using org_id {}, cbi_integration_id {}, cbi_bill_identifier {}, cbi_name {}, cbi_params {}, tls_verification {}".format(
              org_id, cbi_integration_id, cbi_bill_identifier, cbi_name, cbi_params, tls_verification))
-
-#System checks
-if shard not in ['F1','3','4']:
-  logging.error('Invalid Shard Number ' + shard)
-  sys.exit(1)
 
 json_cbi_params = json.loads(cbi_params)
 if type(json_cbi_params) is not type({}):
@@ -64,10 +60,8 @@ else:
 
 logging.info("Using org_id {}".format(org_id))
 
-if shard == 'F1':
-  token_url = "https://login.flexera.com/oidc/token"
-else:
-  token_url = "https://us-"+ shard +".rightscale.com/api/oauth2"
+token_url = "https://login.flexera.com/oidc/token"
+
 
 logging.info("OAuth2: Getting Access Token via Refresh Token...")
 r = requests.post(token_url, data={"grant_type": "refresh_token", "refresh_token": refresh_token}, headers={"X-API-Version": "1.5"}, verify=tls_verify)
