@@ -20,8 +20,8 @@ flexera_integrations = [
 @click.option('--id', prompt="ID", help="ID", required=True)
 @click.option('--name', prompt="CBI Name", help="CBI Name", required=True)
 @click.option('--integration-id', prompt='integration_id', multiple=False, type=click.Choice(flexera_integrations))
-@click.option('--optima-display-name', prompt='Optima Display Name', required=False)
-@click.option('--optima-vendor-name', prompt='Optima Vendor Name', required=False)
+@click.option('--optima-display-name', required=False)
+@click.option('--optima-vendor-name', required=False)
 def create_bill_connect(refresh_token, host, org_id, id, name, integration_id, optima_display_name, optima_vendor_name):
     """
     Bill Connect Create
