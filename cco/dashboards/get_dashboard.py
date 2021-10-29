@@ -25,7 +25,7 @@ def get_dashboard(refresh_token, host, org_id, dashboard_type, user_id, dashboar
     # ===== Use Access Token as Bearer token from them on ===== #
     auth_headers = {"Api-Version": "1.0", "Authorization": "Bearer " + access_token}
     kwargs = {"headers": auth_headers, "allow_redirects": False}
-    dashboard_get_url = "https://api.optima.flexeraeng.com/api/ba-customization-storage-service/orgs/{}".format(org_id)
+    dashboard_get_url = "https://api.optima.flexeraeng.com/bill-analysis/orgs/{}".format(org_id)
     if dashboard_type == 'user':
         dashboard_get_url = dashboard_get_url + "/users/{}/dashboards".format(user_id)
     else:

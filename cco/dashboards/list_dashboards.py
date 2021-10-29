@@ -2,6 +2,7 @@ import logging
 import requests
 import sys
 import click
+import pprint
 
 # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
 logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
@@ -22,7 +23,7 @@ def list_dashboards(refresh_token, host, org_id, dashboard_type, user_id):
     # ===== Use Access Token as Bearer token from them on ===== #
     auth_headers = {"Api-Version": "1.0", "Authorization": "Bearer " + access_token}
     kwargs = {"headers": auth_headers, "allow_redirects": False}
-    dashboard_list_url = "https://api.optima.flexeraeng.com/api/ba-customization-storage-service/orgs/{}".format(org_id)
+    dashboard_list_url = "https://api.optima.flexeraeng.com/bill-analysis/orgs/{}".format(org_id)
     if dashboard_type == 'user':
         dashboard_list_url = dashboard_list_url + "/users/{}/dashboards".format(user_id)
     else:
@@ -32,7 +33,7 @@ def list_dashboards(refresh_token, host, org_id, dashboard_type, user_id):
     kwargs = {"headers": headers, "allow_redirects": False}
     get_response = requests.get(dashboard_list_url, **kwargs)
     get_response.raise_for_status()
-    return get_response.json()
+    pprint.pprint(get_response.json())
 
 def generate_access_token(refresh_token, host):
     domain = '.'.join(host.split('.')[-2:])
