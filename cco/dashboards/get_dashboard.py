@@ -36,8 +36,9 @@ def get_dashboard(refresh_token, host, org_id, dashboard_type, user_id, dashboar
     kwargs = {"headers": headers, "allow_redirects": False}
     get_response = requests.get(dashboard_get_url, **kwargs)
     get_response.raise_for_status()
-    os.makedirs("dashboards", exist_ok=False)
-    with open('dashboards/{}.json'.format(dashboard_id), 'w', encoding='utf-8') as json_file:
+    dashboard_name = get_response.json()["name"].replace(' ', '_')
+    os.makedirs("dashboards", exist_ok=True)
+    with open('dashboards/{}.json'.format(dashboard_name), 'w', encoding='utf-8') as json_file:
         jsonString = json.dumps(get_response.json(), indent=4)
         json_file.write(jsonString)
 
