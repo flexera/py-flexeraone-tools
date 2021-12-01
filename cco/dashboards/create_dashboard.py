@@ -2,6 +2,10 @@ import logging
 import requests
 import sys
 import click
+import json
+from pygments import highlight
+from pygments.lexers import JsonLexer
+from pygments.formatters import TerminalFormatter
 
 # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
 logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
@@ -33,7 +37,10 @@ def list_dashboards(refresh_token, host, org_id, dashboard_type, user_id, filena
     kwargs = {"headers": headers, "allow_redirects": False}
     create_response = requests.post(dashboard_create_url, data=open(filename, 'rb').read(), **kwargs)
     create_response.raise_for_status()
-    return create_response.text
+    if create_response.ok:
+        logging.info("Request Succeeded - Code: {}".format(create_response.status_code))
+        json_str = json.dumps(create_response.json(), indent=4, sort_keys=True)
+        print(highlight(json_str, JsonLexer(), TerminalFormatter()))
 
 def generate_access_token(refresh_token, host):
     domain = '.'.join(host.split('.')[-2:])
