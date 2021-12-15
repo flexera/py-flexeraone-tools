@@ -6,23 +6,13 @@ import click
 
 # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
 logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
-flexera_integrations = [
-    'cbi-oi-optima',
-    'cbi-oi-alibaba',
-    'cbi-oi-azure-china',
-    'cbi-oi-oracle'
-]
 
 @click.command(no_args_is_help=True)
 @click.option('--refresh-token', prompt="Refresh Token", help='Refresh Token from FlexeraOne', required=True)
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @click.option('--org-id', '-i', prompt="Organization ID", help="Organization ID", required=True)
 @click.option('--id', prompt="ID", help="ID", required=True)
-@click.option('--name', prompt="CBI Name", help="CBI Name", required=True)
-@click.option('--integration-id', prompt='integration_id', multiple=False, type=click.Choice(flexera_integrations))
-@click.option('--optima-display-name', required=True)
-@click.option('--optima-vendor-name', required=False)
-def create_bill_connect(refresh_token, host, org_id, id, name, integration_id, optima_display_name, optima_vendor_name):
+def create_bill_connect(refresh_token, host, org_id, id):
     """
     Bill Connect Create
     """
@@ -33,20 +23,9 @@ def create_bill_connect(refresh_token, host, org_id, id, name, integration_id, o
     auth_headers = {"Api-Version": "1.0", "Authorization": "Bearer " + access_token}
     kwargs = {"headers": auth_headers, "allow_redirects": False}
 
-    bill_connect_url = "https://api.optima.flexeraeng.com/api/onboarding/orgs/{}/bill_connects/cbi".format(org_id)
-    cbi_params = {}
-    if optima_display_name:
-        cbi_params["optima_display_name"] = optima_display_name
-    if optima_vendor_name:
-        cbi_params["vendor_name"] = optima_vendor_name
-    bill_connect = {
-        "cbi_bill_identifier": id,
-        "cbi_integration_id": integration_id,
-        "cbi_name": name,
-        "cbi_params": cbi_params
-    }
+    bill_connect_url = "https://api.optima.flexeraeng.com/api/onboarding/orgs/{}/bill_connects/cbi/{}".format(org_id, id)
     try:
-        r = requests.post(bill_connect_url, json.dumps(bill_connect), **kwargs)
+        r = requests.get(bill_connect_url, **kwargs)
         if r.status_code == 403:
             print("\033[91m\nUser needs Enterprise Manager role!!!\n\033[0m")
 

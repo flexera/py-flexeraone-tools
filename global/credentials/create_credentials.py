@@ -27,6 +27,10 @@ def create_credentials(refresh_token, host, org_id, id, role_arn, role_session_n
             {
                 "key": "provider",
                 "value": "aws"
+            },
+            {
+                "key": "manufacturer",
+                "value": "aws"
             }
         ]
     }
