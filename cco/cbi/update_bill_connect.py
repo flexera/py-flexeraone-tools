@@ -15,9 +15,9 @@ logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.s
 @click.option('--name', prompt="CBI Name", help="CBI Name", required=True)
 @click.option('--optima-display-name', required=False)
 @click.option('--optima-vendor-name', required=False)
-def create_bill_connect(refresh_token, host, org_id, id, name, optima_display_name, optima_vendor_name):
+def update_bill_connect(refresh_token, host, org_id, id, name, optima_display_name, optima_vendor_name):
     """
-    Bill Connect Create
+    Bill Connect Update
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
@@ -62,4 +62,4 @@ def generate_access_token(refresh_token, host):
 if __name__ == '__main__':
     # click passes no args
     # pylint: disable=no-value-for-parameter
-    create_bill_connect(auto_envvar_prefix='FLEXERA')
+    update_bill_connect(auto_envvar_prefix='FLEXERA')
