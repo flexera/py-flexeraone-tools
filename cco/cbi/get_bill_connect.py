@@ -12,9 +12,9 @@ logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.s
 @click.option('--host', '-h', prompt="IAM API Endpoint", default="api.flexeratest.com", show_default=True)
 @click.option('--org-id', '-i', prompt="Organization ID", help="Organization ID", required=True)
 @click.option('--id', prompt="ID", help="ID", required=True)
-def create_bill_connect(refresh_token, host, org_id, id):
+def get_bill_connect(refresh_token, host, org_id, id):
     """
-    Bill Connect Create
+    Bill Connect Get
     """
     # Tweak the destination (e.g. sys.stdout instead) and level (e.g. logging.DEBUG instead) to taste!
     logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', stream=sys.stderr, level=logging.INFO)
@@ -50,4 +50,4 @@ def generate_access_token(refresh_token, host):
 if __name__ == '__main__':
     # click passes no args
     # pylint: disable=no-value-for-parameter
-    create_bill_connect(auto_envvar_prefix='FLEXERA')
+    get_bill_connect(auto_envvar_prefix='FLEXERA')
