@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "davidanson.vscode-markdownlint",
+    "formulahendry.code-runner",
+    "jamesls.jmespath-vscode",
+    "fknop.vscode-npm",
+    "dbaeumer.vscode-eslint",
+    "dotjoshjohnson.xml",
+    "editorconfig.editorconfig",
+    "kevinglasson.cornflakes-linter"
+  ]
+}
