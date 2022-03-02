@@ -1,4 +1,17 @@
 {
   "cSpell.enabled": false,
-  "python.venvPath": ".venv/"
+  "python.venvPath": ".venv/",
+  "editor.detectIndentation": false,
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "files.associations": {
+    ".textlintrc": "json"
+  },
+  "markdownlint.config": {
+    "default": true,
+    "MD024": false
+  },
+  "python.autoComplete.addBrackets": true,
+  "python.linting.flake8Enabled": true,
+  "python.analysis.completeFunctionParens": true
 }

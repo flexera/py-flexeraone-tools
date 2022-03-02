@@ -131,3 +131,4 @@ dmypy.json
 # Items
 **/*.json
 node_modules/
+!.vscode/*.json
